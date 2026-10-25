@@ -1,22 +1,21 @@
 package com.example.simplenotes.presentation.screens.editing
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.simplenotes.data.TestNotesRepositoryImpl
-import com.example.simplenotes.domain.AddNoteUseCase
+import com.example.simplenotes.data.NotesRepositoryImpl
 import com.example.simplenotes.domain.DeleteNoteUseCase
 import com.example.simplenotes.domain.EditNoteUseCase
 import com.example.simplenotes.domain.GetNoteUseCase
 import com.example.simplenotes.domain.Note
-import com.example.simplenotes.presentation.screens.editing.EditNoteState.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class EditNoteViewModel(private val noteId: Int) : ViewModel() {
+class EditNoteViewModel(private val noteId: Int, context: Context) : ViewModel() {
 
-    private val repository = TestNotesRepositoryImpl
+    private val repository = NotesRepositoryImpl.getInstance(context)
     private val editNoteUseCase = EditNoteUseCase(repository)
     private val getNoteUseCase = GetNoteUseCase(repository)
     private val deleteNoteUseCase = DeleteNoteUseCase(repository)
@@ -108,7 +107,7 @@ sealed interface EditNoteCommand {
 
 sealed interface EditNoteState {
 
-    data object Initial: EditNoteState
+    data object Initial : EditNoteState
 
     data class Editing(
         val note: Note
